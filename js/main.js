@@ -18,7 +18,7 @@
   }
 
   /* reveal on scroll */
-  const revealables = $$(".section-head, .feature, .desk, .servers-art, .status, .install-in, .faq-list details");
+  const revealables = $$(".section-head, .feature, .phone, .desk, .servers-art, .status, .install-in, .faq-list details");
   if ("IntersectionObserver" in window && !reduced) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
