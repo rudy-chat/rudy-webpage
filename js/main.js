@@ -17,15 +17,6 @@
     toastTimer = setTimeout(() => toastEl.classList.remove("show"), ms);
   }
 
-  /* reveal on scroll */
-  const revealables = $$(".section-head, .feature, .phone, .desk, .servers-art, .status, .install-in, .faq-list details");
-  if ("IntersectionObserver" in window && !reduced) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { rootMargin: "0px 0px -8% 0px" });
-    revealables.forEach((el, i) => { el.classList.add("reveal"); el.style.transitionDelay = (i % 4) * 70 + "ms"; io.observe(el); });
-  }
-
   /* portrait: Rudy follows the cursor */
   const cat = $("#cat");
   const frame = $(".frame");
