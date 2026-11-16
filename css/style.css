@@ -128,7 +128,7 @@ h2 { font: 400 clamp(40px, 5.4vw, 72px)/1.25 var(--display); margin-top: 14px; t
 }
 .hero h1 { font: 400 clamp(64px, 10vw, 148px)/1.12 var(--display); margin-top: 22px; }
 .h1-line { display: block; }
-.h1-soft { color: var(--muted); }
+.h1-soft { color: var(--muted); font-size: .46em; line-height: 1.5; margin-top: .1em; }
 .lede { margin-top: 26px; font-size: 20px; color: var(--ink-2); max-width: 30ch; }
 .ctas { margin-top: 40px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
 
@@ -167,17 +167,19 @@ h2 { font: 400 clamp(40px, 5.4vw, 72px)/1.25 var(--display); margin-top: 14px; t
 .ticker-track b { color: var(--bow); font-weight: 400; }
 @keyframes tick { to { transform: translateX(50%); } }
 
-/* rules */
-.rules { padding-block: 120px; }
-.rule-list { list-style: none; border-top: 1px solid var(--ink); }
-.rule-list li {
-  display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 24px; align-items: baseline;
-  padding-block: 34px; border-bottom: 1px solid var(--hair);
+/* about */
+.about { padding-block: 120px; }
+.features { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ink); }
+.feature { padding: 44px 0 48px; padding-inline-end: 56px; border-bottom: 1px solid var(--hair); }
+.feature:nth-child(even) { padding-inline: 56px 0; border-inline-start: 1px solid var(--hair); }
+.feature svg { width: 30px; height: 30px; fill: none; stroke: var(--bow); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.feature h3 { margin-top: 22px; font-size: 23px; font-weight: 800; line-height: 1.6; }
+.feature p { margin-top: 8px; color: var(--ink-2); max-width: 40ch; }
+@media (max-width: 760px) {
+  .about { padding-block: 88px; }
+  .features { grid-template-columns: minmax(0, 1fr); }
+  .feature, .feature:nth-child(even) { padding: 34px 0; border-inline-start: 0; }
 }
-.num { font: 400 46px/1 var(--display); color: var(--bow); }
-.rule-list h3 { font-size: 24px; font-weight: 800; line-height: 1.6; }
-.rule-list p { color: var(--ink-2); max-width: 52ch; margin-top: 4px; }
-@media (max-width: 640px) { .rule-list li { grid-template-columns: 64px minmax(0, 1fr); gap: 14px; } .num { font-size: 34px; } }
 
 /* audience */
 .audience { background: var(--paper-2); padding-block: 120px; transition: background-color .6s; }

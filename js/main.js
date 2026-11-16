@@ -18,7 +18,7 @@
   }
 
   /* reveal on scroll */
-  const revealables = $$(".section-head, .rule-list li, .desk, .servers-art, .status, .install-in, .faq-list details");
+  const revealables = $$(".section-head, .feature, .desk, .servers-art, .status, .install-in, .faq-list details");
   if ("IntersectionObserver" in window && !reduced) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
@@ -56,17 +56,18 @@
   let remaining = 3;
 
   const answers = [
-    [/قیمت|پول|رایگان|مجانی|free|price/i, "رایگانه."],
-    [/امن|امنیت|رمز|حریم|secure|privacy/i, "پیام‌ها روی سرورهای خود رودی می‌مونن."],
-    [/سرور|server/i, "رودی زیرساخت خودشو داره و به سرویس دیگه‌ای وابسته نیست."],
-    [/ایفون|آیفون|iphone|ios/i, "نسخه‌ی آیفون در دست ساخته."],
-    [/ویندوز|لینوکس|دسکتاپ|کامپیوتر|windows|linux|desktop/i, "نسخه‌ی ویندوز و لینوکس به‌زودی."],
-    [/اندروید|نصب|دانلود|android|install|download/i, "نسخه‌ی اندروید رو از بخش نصب همین صفحه بگیر."],
-    [/رنگ|تم|پوسته|theme|color/i, "روشن، تیره یا مشکی، با نه رنگ. رنگ دلخواه هم می‌شه ساخت."],
-    [/حساب|ثبت|شماره|account|sign/i, "با شماره‌ت. یه کد میاد، واردش می‌کنی، تمام."],
+    [/قیمت|پول|رایگان|مجانی|هزینه|free|price/i, "رودی رایگان است."],
+    [/امن|امنیت|رمز|حریم|خصوصی|secure|privacy/i, "پیام‌های شما روی سرورهای خودِ رودی می‌ماند و در اختیار سرویس دیگری قرار نمی‌گیرد."],
+    [/سرور|زیرساخت|server/i, "رودی روی زیرساخت خودش اجرا می‌شود و به سرویس خارجی وابسته نیست."],
+    [/ایفون|آیفون|iphone|ios/i, "نسخه‌ی iOS در دست ساخت است."],
+    [/ویندوز|لینوکس|دسکتاپ|کامپیوتر|رایانه|windows|linux|desktop/i, "نسخه‌های ویندوز و لینوکس به‌زودی منتشر می‌شوند."],
+    [/اندروید|نصب|دانلود|دریافت|android|install|download/i, "نسخه‌ی اندروید را از بخش «دریافت» همین صفحه بگیرید."],
+    [/رنگ|تم|پوسته|ظاهر|theme|color/i, "پوسته‌ی روشن، تیره یا مشکی با نُه رنگ؛ پوسته‌ی دلخواه هم می‌توانید بسازید."],
+    [/حساب|ثبت|شماره|ورود|account|sign|login/i, "شماره‌تان را وارد کنید و کد تأییدی را که می‌رسد بزنید. همین."],
+    [/گروه|کانال|group|channel/i, "بله، گفت‌وگوی گروهی و کانال هم دارد."],
     [/سلام|درود|hi|hello/i, "سلام. بفرمایید."],
   ];
-  const fallback = "جواب این یکی رو ندارم. بخش سؤال‌ها پایین صفحه هم هست.";
+  const fallback = "پاسخ این سؤال را ندارم. شاید در «پرسش‌های رایج» پایین صفحه پیدایش کنید.";
 
   function say(who, text, cls) {
     const p = document.createElement("p");
@@ -102,8 +103,8 @@
         input.disabled = btn.disabled = false;
         input.focus({ preventScroll: true });
       } else {
-        input.placeholder = "سؤال‌ها تموم شد.";
-        $("#hint").textContent = "";
+        input.placeholder = "سه سؤال‌تان را پرسیدید.";
+        $("#hint").textContent = "برای سؤال‌های بیشتر، بخش پرسش‌های رایج را ببینید.";
       }
     }, 700 + Math.random() * 500);
   });
