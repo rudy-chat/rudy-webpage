@@ -52,22 +52,20 @@
   const transcript = $("#transcript");
   const form = $("#ask");
   const input = $("#q");
-  const left = $("#left");
-  let remaining = 3;
 
   const answers = [
     [/قیمت|پول|رایگان|مجانی|هزینه|free|price/i, "رودی رایگان است."],
-    [/امن|امنیت|رمز|حریم|خصوصی|secure|privacy/i, "پیام‌های شما روی سرورهای خودِ رودی می‌ماند و در اختیار سرویس دیگری قرار نمی‌گیرد."],
+    [/امن|امنیت|رمز|حریم|خصوصی|کجا می|نگه‌داری|secure|privacy/i, "پیام‌های شما روی سرورهای خودِ رودی می‌ماند و در اختیار سرویس دیگری قرار نمی‌گیرد."],
     [/سرور|زیرساخت|server/i, "رودی روی زیرساخت خودش اجرا می‌شود و به سرویس خارجی وابسته نیست."],
     [/ایفون|آیفون|iphone|ios/i, "نسخه‌ی iOS در دست ساخت است."],
     [/ویندوز|لینوکس|دسکتاپ|کامپیوتر|رایانه|windows|linux|desktop/i, "نسخه‌های ویندوز و لینوکس به‌زودی منتشر می‌شوند."],
     [/اندروید|نصب|دانلود|دریافت|android|install|download/i, "نسخه‌ی اندروید را از بخش «دریافت» همین صفحه بگیرید."],
     [/رنگ|تم|پوسته|ظاهر|theme|color/i, "پوسته‌ی روشن، تیره یا مشکی با نُه رنگ؛ پوسته‌ی دلخواه هم می‌توانید بسازید."],
-    [/حساب|ثبت|شماره|ورود|account|sign|login/i, "شماره‌تان را وارد کنید و کد تأییدی را که می‌رسد بزنید. همین."],
+    [/حساب|ثبت|شماره|ورود|بسازم|account|sign|login/i, "شماره‌تان را وارد کنید و کد تأییدی را که می‌رسد بزنید. همین."],
     [/گروه|کانال|group|channel/i, "بله، گفت‌وگوی گروهی و کانال هم دارد."],
     [/سلام|درود|hi|hello/i, "سلام. بفرمایید."],
   ];
-  const fallback = "پاسخ این سؤال را ندارم. شاید در «پرسش‌های رایج» پایین صفحه پیدایش کنید.";
+  const fallback = "پاسخ این سؤال را نمی‌دانم. یکی از پیشنهادهای زیر را امتحان کنید یا «پرسش‌های رایج» را ببینید.";
 
   function say(who, text, cls) {
     const p = document.createElement("p");
@@ -79,35 +77,33 @@
     return p;
   }
 
-  form?.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const q = input.value.trim();
-    if (!q || remaining <= 0) return;
-    input.value = "";
+  let busy = false;
+  function ask(q) {
+    q = q.trim();
+    if (!q || busy) return;
+    busy = true;
     say("شما", q, "you");
-    remaining--;
-    left.textContent = fa(remaining);
-
-    const typing = document.createElement("p");
-    typing.className = "line rudy";
-    typing.innerHTML = '<span class="who">رودی</span><span class="typing" aria-label="در حال نوشتن"><i></i><i></i><i></i></span>';
-    transcript.append(typing);
-    const btn = form.querySelector("button");
-    input.disabled = btn.disabled = true;
-
+    const typing = say("رودی", "", "rudy");
+    typing.querySelector(".said").outerHTML = '<span class="typing" aria-label="در حال نوشتن"><i></i><i></i><i></i></span>';
+    transcript.scrollTop = transcript.scrollHeight;
     const hit = answers.find(([re]) => re.test(q));
     setTimeout(() => {
-      typing.remove();
-      say("رودی", hit ? hit[1] : fallback, "rudy");
-      if (remaining > 0) {
-        input.disabled = btn.disabled = false;
-        input.focus({ preventScroll: true });
-      } else {
-        input.placeholder = "سه سؤال‌تان را پرسیدید.";
-        $("#hint").textContent = "برای سؤال‌های بیشتر، بخش پرسش‌های رایج را ببینید.";
-      }
-    }, 700 + Math.random() * 500);
+      typing.replaceWith(say("رودی", hit ? hit[1] : fallback, "rudy"));
+      transcript.scrollTop = transcript.scrollHeight;
+      busy = false;
+    }, 600 + Math.random() * 400);
+  }
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    ask(input.value);
+    input.value = "";
   });
+  $$("#chips button").forEach((b) => b.addEventListener("click", () => {
+    if (busy) return;
+    b.classList.add("used");
+    ask(b.textContent);
+  }));
 
   /* the one secret: ↑ ↑ ↓ ↓ ← → ← → B A */
   const konami = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
