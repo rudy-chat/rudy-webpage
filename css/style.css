@@ -11,8 +11,8 @@
   --bow: #800000;
   --gold: #b08d57;
   --on-ink: #f6f3ec;
-  --cat-fill: var(--paper);
-  --cat-line: var(--ink);
+  --cat-fill: #fffdf8;
+  --cat-line: #111113;
   --shadow: 0 40px 80px -48px rgba(17, 17, 19, .35);
 
   --display: "Lalezar", "Vazirmatn", serif;
@@ -406,4 +406,34 @@ body.shake main { animation: shake .4s linear 2; }
 }
 @media (max-width: 600px) {
   .hero { padding-block: 8px 44px; }
+}
+
+/* Rudy as a sticker: white face and edge in every mode; a thin ink rim in light mode */
+.hero .cat svg {
+  filter: drop-shadow(1.2px 0 0 var(--sticker-rim)) drop-shadow(-1.2px 0 0 var(--sticker-rim))
+          drop-shadow(0 1.2px 0 var(--sticker-rim)) drop-shadow(0 -1.2px 0 var(--sticker-rim))
+          drop-shadow(0 10px 14px rgba(17, 17, 19, .10));
+}
+:root { --sticker-rim: #111113; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sticker-rim: transparent; } }
+:root[data-theme="dark"], :root.black-tie { --sticker-rim: transparent; }
+
+/* stacked hero: centred copy, small sticker underneath */
+@media (max-width: 900px) {
+  .hero { text-align: center; justify-items: center; gap: 20px; }
+  .hero-copy { margin-inline: auto; }
+  .hero .eyebrow { justify-content: center; }
+  .hero .eyebrow::before { display: none; }
+  .hero .lede { text-align: center; margin-inline: auto; max-width: 30ch; }
+  .hero .ctas { justify-content: center; }
+  .hero > .portrait { display: block; width: 200px; margin-top: 8px; }
+  .hero { padding-block: 16px 40px; }
+}
+@media (max-width: 600px) {
+  .hero > .portrait { width: 170px; }
+  .hero { padding-block: 8px 28px; }
+}
+@media (max-width: 600px) {
+  .hero { padding-bottom: 8px; }
+  .hero + .about { padding-top: 40px; }
 }
