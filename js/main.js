@@ -1,4 +1,4 @@
-/* rudy.chat · small manners and a few secrets. */
+/* rudy.chat */
 (() => {
   "use strict";
 
@@ -6,7 +6,6 @@
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
   const fa = (n) => String(n).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d]);
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const pick = (a) => a[Math.floor(Math.random() * a.length)];
 
   /* toast */
   const toastEl = $("#toast");
@@ -27,7 +26,7 @@
     revealables.forEach((el, i) => { el.classList.add("reveal"); el.style.transitionDelay = (i % 4) * 70 + "ms"; io.observe(el); });
   }
 
-  /* portrait: Rudy keeps an eye on the cursor */
+  /* portrait: Rudy follows the cursor */
   const cat = $("#cat");
   const frame = $(".frame");
   if (cat && frame && !reduced && matchMedia("(pointer: fine)").matches) {
@@ -44,23 +43,12 @@
     }, { passive: true });
   }
 
-  /* egg: the bow is not a button. (It is.) */
-  const bowLines = ["پاپیون رو صاف نکن، صافه.", "لطفاً به پاپیون دست نزنید.", "جدی می‌گم.", "آخرین اخطار."];
-  let bowCount = 0;
+  /* the bow: a small tug */
   $("#bow")?.addEventListener("click", () => {
-    bowCount++;
     cat.classList.remove("tug"); void cat.offsetWidth; cat.classList.add("tug");
-    if (bowCount >= 5) {
-      toast("پاپیونمو ول کن.");
-      cat.classList.add("frown");
-      setTimeout(() => cat.classList.remove("frown"), 3000);
-      bowCount = 0;
-    } else {
-      toast(bowLines[bowCount - 1]);
-    }
   });
 
-  /* audience: three questions, then the secretary closes the door */
+  /* ask Rudy: three questions, short answers */
   const transcript = $("#transcript");
   const form = $("#ask");
   const input = $("#q");
@@ -68,20 +56,17 @@
   let remaining = 3;
 
   const answers = [
-    [/تلگرام|telegram/i, ["اسمشو این‌جا نیار.", "کی؟ نمی‌شناسم."]],
-    [/آبی|blue/i, ["آبی؟ جدی؟", "رنگ دیگه‌ای بلد نیستی؟"]],
-    [/قیمت|پول|رایگان|مجانی|free|price/i, ["رایگانه. کت‌وشلوار رو خودم خریدم."]],
-    [/امن|امنیت|رمز|حریم|secure|privacy/i, ["پیامت مال خودته. من حتی نگاهشم نمی‌کنم."]],
-    [/سرور|server/i, ["سرورها حالشون خوبه. خودم بالای سرشونم."]],
-    [/ایفون|آیفون|iphone|ios/i, ["دارم براش کراوات انتخاب می‌کنم."]],
-    [/ویندوز|لینوکس|دسکتاپ|windows|linux|desktop/i, ["داره اتو می‌خوره. به‌زودی."]],
-    [/اسم|کی هستی|کی‌ای|who/i, ["رودی. فقط رودی."]],
-    [/دوست|عشق|love/i, ["احساساتمو فقط با سرورها در میون می‌ذارم."]],
-    [/گربه|میو|meow|cat/i, ["میو. حالا برو."]],
-    [/سلام|درود|hi|hello/i, ["سلام. سؤالت؟"]],
-    [/چرا/i, ["چون این‌طوری مرتب‌تره."]],
+    [/قیمت|پول|رایگان|مجانی|free|price/i, "رایگانه."],
+    [/امن|امنیت|رمز|حریم|secure|privacy/i, "پیام‌ها روی سرورهای خود رودی می‌مونن."],
+    [/سرور|server/i, "رودی زیرساخت خودشو داره و به سرویس دیگه‌ای وابسته نیست."],
+    [/ایفون|آیفون|iphone|ios/i, "نسخه‌ی آیفون در دست ساخته."],
+    [/ویندوز|لینوکس|دسکتاپ|کامپیوتر|windows|linux|desktop/i, "نسخه‌ی ویندوز و لینوکس به‌زودی."],
+    [/اندروید|نصب|دانلود|android|install|download/i, "نسخه‌ی اندروید رو از بخش نصب همین صفحه بگیر."],
+    [/رنگ|تم|پوسته|theme|color/i, "روشن، تیره یا مشکی، با نه رنگ. رنگ دلخواه هم می‌شه ساخت."],
+    [/حساب|ثبت|شماره|account|sign/i, "با شماره‌ت. یه کد میاد، واردش می‌کنی، تمام."],
+    [/سلام|درود|hi|hello/i, "سلام. بفرمایید."],
   ];
-  const fallback = ["سؤال خوبیه. جوابش نه.", "بعداً بهت خبر می‌دم. یعنی نه.", "منشی‌م یادداشتش کرد.", "رودی به این سؤال با سکوت جواب می‌ده."];
+  const fallback = "جواب این یکی رو ندارم. بخش سؤال‌ها پایین صفحه هم هست.";
 
   function say(who, text, cls) {
     const p = document.createElement("p");
@@ -106,114 +91,33 @@
     typing.className = "line rudy";
     typing.innerHTML = '<span class="who">رودی</span><span class="typing" aria-label="در حال نوشتن"><i></i><i></i><i></i></span>';
     transcript.append(typing);
-    input.disabled = true;
-    form.querySelector("button").disabled = true;
+    const btn = form.querySelector("button");
+    input.disabled = btn.disabled = true;
 
     const hit = answers.find(([re]) => re.test(q));
     setTimeout(() => {
       typing.remove();
-      say("رودی", pick(hit ? hit[1] : fallback), "rudy");
+      say("رودی", hit ? hit[1] : fallback, "rudy");
       if (remaining > 0) {
-        input.disabled = false;
-        form.querySelector("button").disabled = false;
+        input.disabled = btn.disabled = false;
         input.focus({ preventScroll: true });
       } else {
-        setTimeout(() => {
-          say("منشی", "وقت ملاقات تموم شد. فردا تشریف بیارید.", "sys");
-          input.placeholder = "در بسته‌ست.";
-          $("#hint").textContent = "رودی رفت جلسه‌ی بعدی.";
-        }, 700);
+        input.placeholder = "سؤال‌ها تموم شد.";
+        $("#hint").textContent = "";
       }
-    }, 900 + Math.random() * 700);
+    }, 700 + Math.random() * 500);
   });
 
-  /* servers: uptime of this very page */
-  const uptime = $("#uptime");
-  const t0 = Date.now();
-  function tickUptime() {
-    const s = Math.floor((Date.now() - t0) / 1000);
-    const m = Math.floor(s / 60);
-    uptime.textContent = m ? `${fa(m)} دقیقه و ${fa(s % 60)} ثانیه` : `${fa(s)} ثانیه`;
-  }
-  setInterval(tickUptime, 1000);
-
-  /* egg: poke the servers seven times */
-  const servers = $("#servers");
-  const statusText = $("#status-text");
-  const dot = $(".status .dot");
-  let pokes = 0, pokeTimer;
-  servers?.addEventListener("click", () => {
-    pokes++;
-    clearTimeout(pokeTimer);
-    pokeTimer = setTimeout(() => (pokes = 0), 2500);
-    if (pokes === 3) toast("به سرورها دست نزن.");
-    if (pokes >= 7) {
-      pokes = 0;
-      servers.classList.add("hot");
-      dot.classList.add("bad");
-      statusText.textContent = "سرور ۳ رفت چایی بیاره.";
-      toast("آفرین. حالا خوشحالی؟");
-      setTimeout(() => {
-        servers.classList.remove("hot");
-        dot.classList.remove("bad");
-        statusText.textContent = "برگشت. با دو تا چایی.";
-        setTimeout(() => (statusText.textContent = "آروم. مثل همیشه."), 4000);
-      }, 5000);
-    }
-  });
-
-  /* egg: things you type anywhere (outside inputs) */
+  /* the one secret: ↑ ↑ ↓ ↓ ← → ← → B A */
   const konami = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
-  let kIdx = 0, buffer = "";
+  let kIdx = 0;
   addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
     kIdx = k === konami[kIdx] ? kIdx + 1 : (k === konami[0] ? 1 : 0);
     if (kIdx === konami.length) {
       kIdx = 0;
       const on = document.documentElement.classList.toggle("black-tie");
-      toast(on ? "شب رسمی. لطفاً کراوات بزنید." : "مهمونی تموم شد.");
-      return;
-    }
-    if (e.target.closest("input, textarea") || e.key.length !== 1) return;
-    buffer = (buffer + k).slice(-16);
-    if (/telegram$|تلگرام$/.test(buffer)) {
-      buffer = "";
-      document.body.classList.remove("shake"); void document.body.offsetWidth;
-      document.body.classList.add("shake");
-      toast("اینجا اسم اونو نمیاریم.");
-    } else if (/blue$|آبی$/.test(buffer)) {
-      buffer = "";
-      toast("آبی؟ جدی؟");
-    } else if (/rudy$|رودی$/.test(buffer)) {
-      buffer = "";
-      toast("بله؟ صدام کردی؟");
+      toast(on ? "مشکی و طلایی" : "حالت عادی");
     }
   });
-
-  /* egg: the year */
-  const yearLines = ["رودی سال رو با تاریخ تأسیس خودش حساب می‌کنه.", "سال ۱۴۰۵. سال گربه، طبیعتاً.", "قبل از رودی، تاریخ وجود نداشت."];
-  let yIdx = 0;
-  $("#year")?.addEventListener("click", () => toast(yearLines[yIdx++ % yearLines.length]));
-
-  /* egg: idle visitor */
-  let idleTimer;
-  const resetIdle = () => {
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(() => toast("هنوز اینجایی؟ رودی رفت قهوه بیاره.", 4200), 45000);
-  };
-  ["pointermove", "keydown", "scroll", "touchstart"].forEach((ev) => addEventListener(ev, resetIdle, { passive: true }));
-  resetIdle();
-
-  /* egg: tab title when you leave */
-  const title = document.title;
-  document.addEventListener("visibilitychange", () => {
-    document.title = document.hidden ? "رودی منتظره…" : title;
-  });
-
-  /* egg: for the people who open devtools */
-  console.log(
-    "%cرودی%c\nکد رو می‌خونی؟ مؤدب باش.\nپیشنهاد: ↑ ↑ ↓ ↓ ← → ← → B A",
-    "font: 48px Lalezar, serif; color: #800000;",
-    "font: 14px Vazirmatn, sans-serif; color: inherit;"
-  );
 })();
