@@ -373,3 +373,28 @@ body.shake main { animation: shake .4s linear 2; }
   .lede, .section-sub, .feature p, .rule-list p { max-width: none; }
   .portrait { width: min(260px, 72%); }
 }
+
+/* Persian body text set justified: lines run edge to edge, only the last line is short */
+.lede, .section-sub, .feature p, .faq details p, .servers-copy .section-sub {
+  text-align: justify; text-justify: inter-word; hyphens: none;
+}
+.install .section-sub { text-align: center; }
+
+/* calmer vertical rhythm */
+.about, .audience, .install, .faq, .servers { padding-block: 96px; }
+.familiar { padding-block: 24px 96px; }
+.hero { padding-block: 40px 80px; }
+.section-head { margin-bottom: 44px; }
+.feature { padding-block: 36px 40px; }
+@media (min-width: 601px) and (max-width: 900px) {
+  .about, .audience, .install, .faq, .servers { padding-block: 76px; }
+  .familiar { padding-block: 16px 76px; }
+}
+@media (max-width: 600px) {
+  .about, .audience, .install, .faq, .servers { padding-block: 56px; }
+  .familiar { padding-block: 0 56px; }
+  .hero { padding-block: 8px 48px; gap: 28px; }
+  .section-head { margin-bottom: 28px; }
+  .feature, .feature:nth-child(even) { padding-block: 22px 24px; }
+  .feature h3 { margin-top: 10px; }
+}
