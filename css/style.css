@@ -398,3 +398,12 @@ body.shake main { animation: shake .4s linear 2; }
   .feature, .feature:nth-child(even) { padding-block: 22px 24px; }
   .feature h3 { margin-top: 10px; }
 }
+
+/* stacked layouts: no big portrait wedged between the hero and the next section */
+@media (max-width: 900px) {
+  .hero > .portrait { display: none; }
+  .hero { padding-block: 16px 64px; }
+}
+@media (max-width: 600px) {
+  .hero { padding-block: 8px 44px; }
+}
